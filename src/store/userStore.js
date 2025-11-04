@@ -1,22 +1,33 @@
-const users = [
-  {
-    id: 1,
-    login_id: 'studentA',
-    name: 'Nguyen Van A',
-    email: 'studentA@example.com',
-    roles: ['student']
-  },
-  {
-    id: 2,
-    login_id: 'teacherB',
-    name: 'Le Thi B',
-    email: 'teacherB@example.com',
-    roles: ['teacher']
-  }
-];
+import { User } from "../models/user.model";
 
 export const userStore = {
-  findById(id) {
-    return users.find((u) => u.id === Number(id)) || null;
-  }
+  async findById(id) {
+    try {
+      return await User.findById(id).lean();
+    } catch {
+      return null;
+    }
+  },
+
+  async findByLoginId(loginId) {
+    return await User.findOne({ login_id: loginId }).lean();
+  },
+
+  async create(data) {
+    const user = new User(data);
+    await user.save();
+    return user.toObject();
+  },
+
+  async update(id, updates) {
+    return await User.findByIdAndUpdate(id, updates, { new: true }).lean();
+  },
+
+  async delete(id) {
+    return await User.findByIdAndDelete(id).lean();
+  },
+
+  async all() {
+    return await User.find({}).lean();
+  },
 };

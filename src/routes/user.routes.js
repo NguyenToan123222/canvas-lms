@@ -1,12 +1,13 @@
 
 
 import { Router } from 'express';
-import { getSelf } from '../controllers/user.controller.js';
+import { getSelf,login } from '../controllers/user.controller.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 // import { requireRole } from '../middleware/requireRole.js';
 
 const router = Router();
+router.post("/auth/login",requireAuth,login);
 
-router.get('/api/v1/users/self', requireAuth, getSelf);
+router.get('/users/self', requireAuth, getSelf);
 
 export default router;
